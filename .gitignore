@@ -1,3 +1,33 @@
-node_modules/*
-.env*
-build*
+# Зависимости (Node.js пакеты)
+node_modules/
+**/node_modules/
+
+# Результаты сборки (компиляции)
+dist/
+**/dist/
+
+# Локальные конфигурации и секреты (Переменные окружения)
+.env
+.env.local
+.env.*.local
+**/server/.env
+
+# Локальные логи ошибок npm / yarn
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Настройки редакторов кода (VS Code, WebStorm)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Системные файлы операционных систем
+.DS_Store
+Thumbs.db
