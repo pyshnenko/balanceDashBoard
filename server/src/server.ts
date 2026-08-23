@@ -6,7 +6,7 @@ import https from 'https';
 import cors from 'cors';
 
 // Ищем .env строго в корне папки balanceDashBoard
-require('dotenv').config({ path: path.join(process.cwd(), '.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') }); 
 
 const app = express();
 const PORT: number = Number(process.env.PORT) || 3000;
