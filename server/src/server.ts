@@ -46,10 +46,31 @@ const axiosInstance = axios.create({
 });
 
 // Функция отправки оповещения
+// Измените эту функцию в вашем файле мониторинга:
 async function sendNotification(serverName: string, oldStatus: ServerStatus, newStatus: ServerStatus): Promise<void> {
-  const message = `⚠%EF%B8%8F Сервер [${serverName}] изменил статус с ${oldStatus} на ${newStatus}!`;
-  console.log(`[ALERT] ${message}`);
-  // СЮДА МОЖНО ВСТАВИТЬ ОТПРАВКУ В ТЕЛЕГРАМ / СЛЭК / EMAIL
+  // Назначаем эмодзи в зависимости от нового статуса
+  const statusEmoji = newStatus === 'UP' ? '✅' : '🚨';
+  
+  // Формируем красивое текстовое сообщение для Телеграма
+  const message = `${statusEmoji} <b>Сервер [${serverName}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
+  
+  console.log(`[ALERT] Отправка уведомления: Сервер [${serverName}] ${oldStatus} -> ${newStatus}`);
+
+  try {
+    // Порт 4500, который мы выделили в коде бота app3.js
+    // Если бот крутится на том же сервере, оставляем localhost
+    const BOT_ALERT_URL = process.env.BOT_ALERT_URL || 'http://localhost:4500/alert';
+
+    await axios.post(BOT_ALERT_URL, {
+      message: message
+    }, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    console.log(`[ALERT] Уведомление успешно доставлено в Телеграм-бот`);
+  } catch (error: any) {
+    console.error('[ALERT ERROR] Не удалось отправить уведомление в бот:', error.message);
+  }
 }
 
 // Функция PULL-опроса
