@@ -28,7 +28,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-      <Card sx={{ width: 400, p: 1, boxShadow: '0 4px 6px rgba(0,0,0,0.05)', borderRadius: 2 }}>
+      <Card sx={{ width: 700, p: 1, boxShadow: '0 4px 6px rgba(0,0,0,0.05)', borderRadius: 2 }}>
         <CardContent>
           <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', mb: 2, pb: 1, borderBottom: '2px solid #f5f6fa' }}>
             Статус серверов (Порт 17581)

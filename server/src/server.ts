@@ -27,12 +27,16 @@ const POLL_INTERVAL: number = 5000;
 export type ServerStatus = 'UP' | 'DOWN' | string;
 
 interface ServersState {
-  [serverName: string]: ServerStatus;
+  [serverName: string]: ServerInfo;
 }
 
 export interface ServerInfo {
   name: string;
   status: ServerStatus;
+  scur: number;       // Текущие активные сессии
+  rate: number;       // Текущий RPS (запросов в секунду)
+  hrsp_5xx: number;   // Ошибки сервера (5xx)
+  lastchg: string;    // Время с последнего изменения статуса (в читаемом виде)
 }
 
 let serversState: ServersState = {};
@@ -72,16 +76,33 @@ async function pollHAProxy(): Promise<void> {
     const records: string[][] = parse(response.data, { comment: '#', skip_empty_lines: true });
 
     records.forEach((row: string[]) => {
-      const pxname = row[0];
-      const svname = row[1];
-      const status = row[17];
+      const pxname = row[0];  // Имя секции (port_17581)
+      const svname = row[1];  // Имя сервера (client_main / client_backup)
+      const status = row[17]; // Статус (UP / DOWN)
+      
+      // Достаем новые полезные метрики из CSV HAProxy
+      const scur = Number(row[4]) || 0;       // Текущие сессии
+      const rate = Number(row[33]) || 0;      // Текущий RPS
+      const hrsp_5xx = Number(row[43]) || 0;  // Ответы 5xx
+      const lastchgSec = Number(row[23]) || 0; // Секунд с последней смены статуса
 
       if (pxname === BACKEND_NAME && svname !== 'BACKEND' && svname !== 'FRONTEND') {
-        const oldStatus = serversState[svname];
+        const oldStatus = serversState[svname]?.status;
+
         if (oldStatus && oldStatus !== status) {
           sendNotification(svname, oldStatus, status);
         }
-        serversState[svname] = status;
+
+        // Переводим секунды изменения статуса в понятный формат (например, "2ч 15м")
+        let lastchg = 'только что';
+        if (lastchgSec > 0) {
+          const hours = Math.floor(lastchgSec / 3600);
+          const minutes = Math.floor((lastchgSec % 3600) / 60);
+          lastchg = hours > 0 ? `${hours}ч ${minutes}м назад` : `${minutes}м назад`;
+        }
+
+        // Сохраняем расширенный объект состояния
+        serversState[svname] = { name: svname, status, scur, rate, hrsp_5xx, lastchg };
       }
     });
   } catch (error: any) {
@@ -95,11 +116,7 @@ pollHAProxy();
 // --- ЭНДПОИНТЫ API ---
 // Nginx отрезал /stat, поэтому Node.js должен слушать чистый /api/status
 app.get('//api/status', (req: Request, res: Response<ServerInfo[]>) => {
-  const data: ServerInfo[] = Object.entries(serversState).map(([name, status]) => ({
-    name,
-    status
-  }));
-  res.json(data);
+  res.json(Object.values(serversState));
 });
 
 // 2. Только ПОСЛЕ роута API определяем пути к статике фронтенда
