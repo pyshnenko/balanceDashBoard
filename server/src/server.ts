@@ -106,7 +106,8 @@ app.get('/api/status', (req: Request, res: Response<ServerInfo[]>) => {
 const frontendPath = path.join(process.cwd(), 'frontend/dist');
 app.use(express.static(frontendPath));
 
-app.get('/*', (req: Request, res: Response) => {
+// Все остальные запросы перенаправляем на index.html фронтенда
+app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
