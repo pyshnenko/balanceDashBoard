@@ -94,7 +94,7 @@ pollHAProxy();
 
 // --- ЭНДПОИНТЫ API ---
 // Nginx отрезал /stat, поэтому Node.js должен слушать чистый /api/status
-app.get('/api/status', (req: Request, res: Response<ServerInfo[]>) => {
+app.get('//?api/status', (req: Request, res: Response<ServerInfo[]>) => {
   const data: ServerInfo[] = Object.entries(serversState).map(([name, status]) => ({
     name,
     status
@@ -102,11 +102,11 @@ app.get('/api/status', (req: Request, res: Response<ServerInfo[]>) => {
   res.json(data);
 });
 
-// --- РАЗДАЧА СТАТИКИ (ФРОНТЕНД) ---
+// 2. Только ПОСЛЕ роута API определяем пути к статике фронтенда
 const frontendPath = path.resolve(__dirname, '../../frontend/dist');
 app.use(express.static(frontendPath));
 
-// Все остальные запросы перенаправляем на index.html фронтенда
+// 3. И в самом конце перехватываем всё остальное для работы React-роутинга
 app.get('/*splat', (req: Request, res: Response) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
