@@ -94,7 +94,7 @@ pollHAProxy();
 
 // --- ЭНДПОИНТЫ API ---
 // Nginx отрезал /stat, поэтому Node.js должен слушать чистый /api/status
-app.get('//?api/status', (req: Request, res: Response<ServerInfo[]>) => {
+app.get('//api/status', (req: Request, res: Response<ServerInfo[]>) => {
   const data: ServerInfo[] = Object.entries(serversState).map(([name, status]) => ({
     name,
     status
