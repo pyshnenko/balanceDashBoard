@@ -122,7 +122,7 @@ pollHAProxy();
 // --- ЭНДПОИНТЫ API ---
 
 // Отдаем состояние серверов в формате JSON
-app.get('/stat/api/status', (req: Request, res: Response<ServerInfo[]>) => {
+app.get('/api/status', (req: Request, res: Response<ServerInfo[]>) => {
   const data: ServerInfo[] = Object.entries(serversState).map(([name, status]) => ({
     name,
     status
