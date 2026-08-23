@@ -1,5 +1,5 @@
 import path from 'path';
-require('dotenv').config({ path: path.join(process.cwd(), '.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') }); 
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import { parse } from 'csv-parse/sync';
