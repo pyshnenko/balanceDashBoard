@@ -11,7 +11,7 @@ export const Dashboard: React.FC = () => {
     const fetchStatus = async (): Promise<void> => {
       try {
         // Изменено на относительный путь для работы на одном порту
-        const response = await fetch('/api/status');
+        const response = await fetch('/stat/api/status');
         const data: ServerInfo[] = await response.json();
         setServers(data);
         console.log(data)
