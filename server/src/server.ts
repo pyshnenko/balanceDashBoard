@@ -140,7 +140,7 @@ app.get('/*splat', (req: Request, res: Response) => {
 });
 
 // --- ЗАПУСК СЕРВЕРА ---
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`==================================================================`);
   console.log(` Сервер успешно запущен на порту ${PORT}`);
   console.log(` Мониторинг и UI доступны по адресу: http://localhost:${PORT}`);
