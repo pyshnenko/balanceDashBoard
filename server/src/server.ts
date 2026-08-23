@@ -1,5 +1,5 @@
 import path from 'path';
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config({ path: path.join(process.cwd(), '.env') });
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import { parse } from 'csv-parse/sync';
@@ -13,7 +13,11 @@ const PORT: number = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json());
-
+console.log('Проверка .env:', {
+  PORT: process.env.PORT,
+  HAPROXY_URL: process.env.HAPROXY_URL,
+  HAPROXY_USER: process.env.HAPROXY_USER ? 'Задан' : 'НЕ ЗАДАН'
+});
 // --- КОНФИГУРАЦИЯ ИЗ ПЕРЕМЕННЫХ ОКРУЖЕНИЯ ---
 const HAPROXY_URL: string = process.env.HAPROXY_URL || 'https://euroigor.ru';
 const HAPROXY_AUTH = { 
