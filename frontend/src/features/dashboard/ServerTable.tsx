@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Typography } from '@mui/material';
+import { serverNames } from '../../constans/serverNames';
 
 // Описываем расширенную структуру, приходящую от бэкенда
 export interface ServerInfo {
@@ -42,7 +43,7 @@ export const ServerTable: React.FC<ServerTableProps> = ({ servers }) => {
               return (
                 <TableRow key={server.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
-                    {server.name}
+                    {serverNames.get(server.name) ?? server.name}
                   </TableCell>
                   <TableCell align="center">
                     <Chip 

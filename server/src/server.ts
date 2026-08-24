@@ -4,6 +4,7 @@ import axios from 'axios';
 import { parse } from 'csv-parse/sync';
 import https from 'https';
 import cors from 'cors';
+import {backendsNames} from './consts/names';
 
 // Ищем .env строго в корне папки balanceDashBoard
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') }); 
@@ -21,7 +22,6 @@ const HAPROXY_AUTH = {
   password: process.env.HAPROXY_PASS || '' 
 };
 
-const BACKEND_NAME: string = 'port_17581';
 const POLL_INTERVAL: number = 5000;
 
 export type ServerStatus = 'UP' | 'DOWN' | string;
@@ -86,7 +86,8 @@ async function pollHAProxy(): Promise<void> {
       const hrsp_5xx = Number(row[43]) || 0;  // Ответы 5xx
       const lastchgSec = Number(row[23]) || 0; // Секунд с последней смены статуса
 
-      if (pxname === BACKEND_NAME && svname !== 'BACKEND' && svname !== 'FRONTEND') {
+      if (backendsNames.includes(pxname) && svname !== 'BACKEND' && svname !== 'FRONTEND') {
+        console.log(svname)
         const oldStatus = serversState[svname]?.status;
 
         if (oldStatus && oldStatus !== status) {
@@ -118,6 +119,10 @@ pollHAProxy();
 app.get('//api/status', (req: Request, res: Response<ServerInfo[]>) => {
   res.json(Object.values(serversState));
 });
+app.get('/stat/api/status', (req: Request, res: Response<ServerInfo[]>) => {
+  res.json(Object.values(serversState));
+});
+
 
 // 2. Только ПОСЛЕ роута API определяем пути к статике фронтенда
 const frontendPath = path.resolve(__dirname, '../../frontend/dist');
