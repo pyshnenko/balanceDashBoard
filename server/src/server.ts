@@ -4,7 +4,7 @@ import axios from 'axios';
 import { parse } from 'csv-parse/sync';
 import https from 'https';
 import cors from 'cors';
-import {backendsNames} from './consts/names';
+import {backendsNames, serverNames} from './consts/names';
 
 // Ищем .env строго в корне папки balanceDashBoard
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') }); 
@@ -60,7 +60,7 @@ const axiosInstance = axios.create({
 // Функция отправки оповещения в Телеграм-бот
 async function sendNotification(serverName: string, oldStatus: ServerStatus, newStatus: ServerStatus): Promise<void> {
   const statusEmoji = newStatus === 'UP' ? '✅' : '🚨';
-  const message = `${statusEmoji} <b>Сервер [${serverName}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
+  const message = `${statusEmoji} <b>Сервер [${serverNames.get(serverName)}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
   
   console.log(`[ALERT] ${serverName}: ${oldStatus} -> ${newStatus}`);
 
