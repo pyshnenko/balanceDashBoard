@@ -176,8 +176,11 @@ app.get(['/api/status', '//api/status', '/stat/api/status'], (req: Request, res:
   res.json(serversState);
 });
 
-// Ловушка последней надежды для SPA
-app.use((req: Request, res: Response) => {
+app.use(express.static(frontendPath));
+
+
+// 3. И в самом конце перехватываем всё остальное для работы React-роутинга
+app.get('/*splat', (req: Request, res: Response) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
