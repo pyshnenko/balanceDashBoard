@@ -20,8 +20,6 @@ const GlassCardWrapper: React.FC<GlassCardWrapperProps> = ({ pxname, allItems, i
   return (
     <Box
       sx={{
-        width: '100%',
-        maxWidth: 900,
         position: 'relative',
         '@keyframes floatBlob': {
           '0%': { transform: 'translate(0px, 0px) scale(1)' },
