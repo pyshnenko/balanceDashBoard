@@ -2,9 +2,9 @@ const backendsNames: string[] = ['port_38356', 'port_17581', 'port_19204', 'port
 
 const serverNames = new Map<string, string> ([
     ['client_main', 'Миша основа'],
-    ['client_backup', 'Миша резерв'],,
+    ['client_backup', 'Миша резерв'],
     ['client_main_v6','Миша основа v6'],
-    ['client_backup_v6','Миша резерв v6']
+    ['client_backup_v6','Миша резерв v6'],
     ['v6_my', 'Мой сервер v6'],
     ['v6_ts', 'ТС v6'],
     ['v6_codegap', 'codegap v6'],
