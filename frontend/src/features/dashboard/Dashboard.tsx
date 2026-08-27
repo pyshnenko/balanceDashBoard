@@ -184,7 +184,7 @@ export const Dashboard: React.FC = () => {
         </IconButton>
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
         {servers && Object.keys(servers).map((pxname) => {
           const allItems = servers[pxname] || { servers: [] };
           return (
