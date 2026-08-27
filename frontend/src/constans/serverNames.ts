@@ -11,7 +11,8 @@ const serverNames = new Map<string, string> ([
     ['shrek', 'женя'],
     ['aeza', 'aeza'],
     ['backend_5', 'codegap'],
-    ['aeza_test_icmp', 'icmp']
+    ['aeza_test_icmp', 'icmp'],
+    ['aeza_test_icmp_v6', 'icmp v6']
 ])
 
 export {serverNames}
