@@ -76,11 +76,9 @@ export const ServerTable: React.FC<ServerTableProps> = ({ servers, isDark = fals
             </TableCell>
             <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="center">Статус</TableCell>
             <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">RPS</TableCell>
-            <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">Принято</TableCell>
-            <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">Отдано</TableCell>
+            <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">Передано</TableCell>
             <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">Сессии</TableCell>
-            <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">5xx</TableCell>
-            <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">Изменен</TableCell>
+            <TableCell sx={{ fontWeight: 700, color: isDark ? '#94a3b8' : '#475569', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }} align="right">Обн.</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -160,14 +158,10 @@ export const ServerTable: React.FC<ServerTableProps> = ({ servers, isDark = fals
                       {server.rate}
                     </span>
                   </TableCell>                  
-                  <TableCell align="right" sx={{ color: isDark ? '#cbd5e1' : '#334155', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }}>{formatBytes(server.bin)}</TableCell>
                   <TableCell align="right" sx={{ color: isDark ? '#cbd5e1' : '#334155', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }}>{formatBytes(server.bout)}</TableCell>
                   <TableCell align="right" sx={{ color: isDark ? '#cbd5e1' : '#334155', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }}>{server.scur}</TableCell>
-                  <TableCell align="right" sx={{ color: server.hrsp_5xx > 0 ? '#e74c3c' : (isDark ? '#64748b' : '#94a3b8'), borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }}>
-                    {server.hrsp_5xx}
-                  </TableCell>
                   <TableCell align="right" sx={{ color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.8rem', borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)', whiteSpace: 'nowrap' }}>
-                    {server.lastchg}
+                    {server.lastchg.replace(' назад','')}
                   </TableCell>
                 </TableRow>
               );
