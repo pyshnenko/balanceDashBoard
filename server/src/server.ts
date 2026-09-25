@@ -80,7 +80,9 @@ async function sendNotification(serverName: string, oldStatus: ServerStatus, new
 // Фоновый опрос балансировщика
 async function pollHAProxy(): Promise<void> {
   try {
-    const response = await axiosInstance.get<string>(HAPROXY_URL);
+    const response = await axiosInstance.get<string>(HAPROXY_URL, {
+      httpsAgent: httpsIPv6Agent
+    });
     
     if (typeof response.data === 'string' && (response.data.trim().startsWith('<?xml') || response.data.trim().startsWith('<html') || response.data.trim().startsWith('<!DOCTYPE'))) {
       console.error('[WARNING] HAProxy вернул HTML вместо CSV. Проверьте логин/пароль в .env');
