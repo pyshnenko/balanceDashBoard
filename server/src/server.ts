@@ -185,6 +185,6 @@ app.get('/*splat', (req: Request, res: Response) => {
 });
 
 // Слушаем на 0.0.0.0, чтобы внешние запросы от Nginx доходили до порта
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Сервер успешно запущен на порту ${PORT}`);
+app.listen(PORT, '::', () => {
+  console.log(`Сервер успешно запущен на порту ${PORT} (IPv6/IPv4)`);
 });
