@@ -12,6 +12,8 @@ require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const app = express();
 const PORT: number = Number(process.env.PORT) || 3000;
 
+const httpsIPv6Agent = new https.Agent({ family: 6 });
+
 const IS_DEV = process.env.NODE_ENV === 'development';
 
 app.use(cors());
