@@ -72,7 +72,7 @@ async function sendNotification(events: StatusChange[]): Promise<void> {
   const message = events.map(({ serverName, oldStatus, newStatus }) => {
     const statusEmoji = newStatus === 'UP' ? '✅' : '🚨';
     console.log(`[ALERT] ${serverName}: ${oldStatus} -> ${newStatus}`);
-    return `${statusEmoji} <b>Сервер [${serverNames.get(serverName) ?? serverName}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
+    return `${statusEmoji} <b>Сервер [${serverNames.has(serverName) ? serverNames.get(serverName) : serverName}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
   }).join('\n\n');
 
   try {
