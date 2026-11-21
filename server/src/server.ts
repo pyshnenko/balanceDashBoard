@@ -60,11 +60,20 @@ const axiosInstance = axios.create({
 });
 
 // Функция отправки оповещения в Телеграм-бот
-async function sendNotification(serverName: string, oldStatus: ServerStatus, newStatus: ServerStatus): Promise<void> {
-  const statusEmoji = newStatus === 'UP' ? '✅' : '🚨';
-  const message = `${statusEmoji} <b>Сервер [${serverNames.get(serverName)}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
-  
-  console.log(`[ALERT] ${serverName}: ${oldStatus} -> ${newStatus}`);
+interface StatusChange {
+  serverName: string;
+  oldStatus: ServerStatus;
+  newStatus: ServerStatus;
+}
+
+async function sendNotification(events: StatusChange[]): Promise<void> {
+  if (events.length === 0) return;
+
+  const message = events.map(({ serverName, oldStatus, newStatus }) => {
+    const statusEmoji = newStatus === 'UP' ? '✅' : '🚨';
+    console.log(`[ALERT] ${serverName}: ${oldStatus} -> ${newStatus}`);
+    return `${statusEmoji} <b>Сервер [${serverNames.get(serverName) ?? serverName}]</b> изменил статус:\n• Было: <code>${oldStatus}</code>\n• Стало: <b>${newStatus}</b>`;
+  }).join('\n\n');
 
   try {
     // На локальной машине этот запрос выдаст ошибку ECONNREFUSED, если бот не запущен дома.
@@ -95,6 +104,7 @@ async function pollHAProxy(): Promise<void> {
 
     // Создаем временный объект актуального состояния, строго соответствующий GroupedServersState
     const tempState: GroupedServersState = {};
+    const statusChanges: StatusChange[] = [];
 
     records.forEach((row: string[]) => {
       const pxname = row[0];  // Имя секции (например, port_17581)
@@ -133,7 +143,7 @@ async function pollHAProxy(): Promise<void> {
           const oldStatus = oldServerData?.status;
 
           if (oldStatus && oldStatus !== status) {
-            sendNotification(svname, oldStatus, status);
+            statusChanges.push({ serverName: svname, oldStatus, newStatus: status });
           }
 
           let lastchg = 'только что';
@@ -160,6 +170,9 @@ async function pollHAProxy(): Promise<void> {
 
     // Перезаписываем глобальное состояние полностью готовым сгруппированным объектом
     serversState = tempState;
+
+    // Отправляем все изменения, найденные за этот цикл опроса, одним сообщением.
+    await sendNotification(statusChanges);
 
   } catch (error: any) {
     console.error('Ошибка опроса HAProxy:', error.message);
